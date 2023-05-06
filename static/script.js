@@ -373,9 +373,12 @@ const agentTransDetail=async(url)=>{
     let dateString = element.date;
     let date = new Date(dateString);
     let istDate = date.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+    let ind = istDate.indexOf(",");
+    if(ind !== -1)
+      istDate = istDate.substring(0, ind);
     row.innerHTML += `<tr>
                         <th scope="row">${index+1}</th>
-                        <td>${istDate.substring(0, 8)}</td>
+                        <td>${istDate}</td>
                         <td>${element.buyer_id}</td>
                         <td>${element.prop_id}</td>
                         <td>${element.type}</td>
