@@ -37,24 +37,22 @@ To import the provided database, follow these steps:
 
 ## Installation
 
-Clone the repository or download the source code:
-git clone https://github.com/techrajat/property-dealership-website
+- Clone the repository or download the source code:
+`git clone https://github.com/techrajat/property-dealership-website`
 
-
-Install dependencies by running the following command in the project directory:
-npm install
+- Install dependencies by running the following command in the project directory:
+`npm install`
 
 
 ## Configuration
 
-Create a `.env` similar to the `.env.example` file in the root directory:
-- Replace `{Your mysql username}` with with the username of your mysql local server (usually "root").
-- Replace `{Your mysql password}` with with the password of your mysql local server.
+Create a `.env` similar to the `.env.example` file in the root directory and make the following changes to it:
+- Replace `Your mysql username` with with the username of your mysql local server (usually "root").
+- Replace `Your mysql password` with with the password of your mysql local server.
 
 ## Starting the app
 
-Run the following command in the project directory:
-npm start
+- Run the following command in the project directory:
+`npm start`
 
-
-Navigate to http://localhost:3000 in your web browser to view the application.
+- Navigate to `http://localhost:3000` in your web browser to view the application.
