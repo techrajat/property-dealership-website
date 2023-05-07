@@ -1,6 +1,6 @@
 # RK Homes
 
-This website is for property dealership where a user can buy a property of his/her choice via an agent. The user can also sell his/her property on this website.
+This website is for property dealership where a user can buy properties of his/her choice via an agent. The user can also sell properties on this website.
 
 This web-application is developed using the following technologies:
 
@@ -53,6 +53,6 @@ Create a `.env` similar to the `.env.example` file in the root directory and mak
 ## Starting the app
 
 - Run the following command in the project directory:
-`npm start`
+`nodemon .\app.js` or `node .\app.js`
 
 - Navigate to `http://localhost:3000` in your web browser to view the application.
