@@ -6,7 +6,7 @@ This web-application is developed using the following technologies:
 
 ## Frontend
 - HTML
-- CSS
+- CSS (including Bootstrap)
 - JavaScript
 
 ## Backend
