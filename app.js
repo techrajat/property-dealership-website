@@ -3,6 +3,8 @@ const path = require('path');
 const app = express();
 const mysql = require('mysql2');
 require('dotenv').config();
+
+// Establish connection with mysql local server
 const con = mysql.createConnection({
   host: "localhost",
   user: process.env.user,
@@ -51,6 +53,7 @@ app.get('/userExist', (req, res)=>{
   res.send(userExist);
 });
 
+// Match the phone and password of the user and also validate
 let id, user;
 app.post('/login', (req, res)=>{
   con.query(`select * from user where phone='${req.body.phone}'`, (err, row)=>{
@@ -96,14 +99,16 @@ app.get('/logout', (req, res)=>{
   res.sendFile(path.join(__dirname, "./template/index.html"));
 });
 
+// Send the residential property details
 app.get('/resData', (req, res)=> {
-    con.query("select prop_id, type, `space (BHK)` as space, `amount (Lacs)` as amount, city, locality, status from res_prop limit 100", (err, rows)=>{
-        if(err)
-          throw err;
-        res.send(rows);
-      });
+  con.query("select prop_id, type, `space (BHK)` as space, `amount (Lacs)` as amount, city, locality, status from res_prop limit 100", (err, rows)=>{
+    if(err)
+    throw err;
+    res.send(rows);
+  });
 });
 
+// Send the commercial property details
 app.get('/commData', (req, res)=>{
     con.query("select prop_id, type, `area (sq ft)` as space, `amount (Crore)` as amount, city, locality, status from comm_prop limit 100", (err, rows)=>{
         if(err)
@@ -112,6 +117,7 @@ app.get('/commData', (req, res)=>{
       });
 });
 
+// Filter the properties according to the city entered by the user
 let searchResult;
 app.post('/search', (req, res)=>{
   con.query(`select type, \`space (BHK)\` as space, \`amount (Lacs)\` as amount, city, locality, status from res_prop where city='${req.body.city}'`, (err, rows)=>{
@@ -151,6 +157,7 @@ app.post('/type', (req, res)=>{
     });
 });
 
+// Create a view "filter" in the database which will contain the properties filtered according to the user requirements
 app.post('/pref', (req, res)=>{
   if(type == 'Residential')
   {
@@ -236,8 +243,7 @@ app.get('/confirm', (req, res)=>{
   res.sendFile(path.join(__dirname, "./template/buyer/sixth.html"));
 });
 
-// This way we can receive a variable from frontend JS :-
-// Receiving 'selAgent' from frontend :- 
+// Receiving the selected from frontend :- 
 app.use(express.json());
 let selAgent;
 app.post('/returnAgent', (req, res) => {
@@ -249,10 +255,11 @@ let day = date.getDate();
 let month = date.getMonth() + 1;
 let year = date.getFullYear();
 
-// Receiving 'selected' from frontend :- 
+// Receiving the selected property from frontend :- 
 app.post('/returnSelected', (req, res) => {
   const selected = req.body.selected;
   let num_prop = selAgent.num_prop_sold;
+  // Delete the property from the database once sold and enter the transaction details in the table "trans_rec"
   if(selected.prop == "Residential")
   {
     con.query(`delete from res_prop where prop_id = '${selected.prop_id}'`, (err, rows)=>{
@@ -267,6 +274,7 @@ app.post('/returnSelected', (req, res) => {
       if(err)
         throw err;
     });
+    // Update the details of the agent who sold the property
     con.query(`update agent set avg_amt = (avg_amt * ${num_prop} + ${selected.extra * Math.pow(10, 5)}) / ${num_prop+1} where agent_id = '${selAgent.agent_id}'`, (err, rows)=>{
       if(err)
         throw err;
@@ -327,6 +335,7 @@ app.post('/typeSeller', (req, res)=>{
   }
 });
 
+// Insert the property details of the seller in the database
 app.post('/prefSeller', (req, res)=>{
   if(type == 'Residential')
   {
@@ -358,6 +367,7 @@ app.post('/prefSeller', (req, res)=>{
   }
 });
 
+// Fetch agent details for the agent office
 app.get('/agentOffice', (req, res)=>{
   res.sendFile(path.join(__dirname, "./template/agentOffice/first.html"));
 });
@@ -380,14 +390,7 @@ app.get('/getAgentDetails', (req, res)=>{
   })
 });
 
-app.get('/admin', (req, res)=>{
-  res.sendFile(path.join(__dirname, "./template/dbAdmin/dbLogin.html"));
-})
-
-app.post('/dbLogin', (req, res)=>{
-    res.sendFile(path.join(__dirname, "./template/dbAdmin/first.html"));
-})
-
+// Start the server
 app.listen(port, ()=>{
     console.log(`Server started successfully at http://${hostname}:${port}`);
 });
